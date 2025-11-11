@@ -2,9 +2,8 @@
 
 echo "Creating 'multilingual-notes' project structure..."
 
-# Create root directory and move into it
-mkdir -p multilingual-notes
-cd multilingual-notes
+# Move to root directory
+cd ..
 
 # === Create Root Files ===
 touch .dockerignore
