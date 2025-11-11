@@ -27,6 +27,9 @@ RUN npm run build
 # This stage creates the final, minimal production image
 FROM node:18-alpine
 
+# Install curl using apk, and use --no-cache to keep the image size minimal
+#RUN apk --no-cache add curl
+
 WORKDIR /usr/src/app
 
 # Create a non-root user and group for security

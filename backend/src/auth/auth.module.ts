@@ -25,6 +25,6 @@ import { ConfigModule } from '@nestjs/config';
   providers: [JwtStrategy],
 
   // Export PassportModule so other modules (like NotesModule) can use JwtAuthGuard
-  exports: [PassportModule],
+  exports: [PassportModule, JwtStrategy],
 })
 export class AuthModule {}

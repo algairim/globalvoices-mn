@@ -14,7 +14,7 @@ import { Repository } from 'typeorm';
 interface KeycloakPayload {
   sub: string;
   email: string;
-  // Add other fields from the token you might need, e.g., preferred_username
+  preferred_username: string;
 }
 
 /**
@@ -54,7 +54,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       algorithms: ['RS256'],
 
       // 4. Who the token issuer should be
-      issuer: keycloakAuthUrl,
+      //issuer: keycloakAuthUrl, // TODO: temporary bypass due to 'localhost' docker setup, enable back for production!
     });
   }
 
@@ -71,14 +71,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     try {
       // Find the user in our local DB by their Keycloak ID ('sub')
-      let user = await this.usersRepository.findOneBy({ id: payload.sub });
+      // Use .findOne() with explicit 'where' clause for robustness
+      let user = await this.usersRepository.findOne({
+        where: { keycloakId: payload.sub }
+      });
 
       // If the user doesn't exist, create them "just-in-time"
       if (!user) {
         this.logger.log(`Provisioning new user: ${payload.email}`);
         user = this.usersRepository.create({
-          id: payload.sub, // Use Keycloak's ID as our primary key
+          keycloakId: payload.sub, // <-- FIX: Save Keycloak ID here
+          username: payload.preferred_username, // <--- FIX: Map the username claim
           email: payload.email,
+          // Do NOT set the 'id' property; let PostgreSQL auto-generate the UUID for the primary key
         });
         await this.usersRepository.save(user);
       }

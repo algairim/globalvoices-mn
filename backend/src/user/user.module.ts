@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { UserService } from './user.service'; // Assuming you have a user.service.ts
 
 /**
  * This module is responsible for managing the User entity.
@@ -10,7 +11,8 @@ import { User } from './entities/user.entity';
  */
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [],
-  exports: [TypeOrmModule], // Export this so AuthModule can use Repository<User>
+  providers: [UserService],
+  // CRITICAL FIX: Export UserService so JwtStrategy (in AuthModule) can access it
+  exports: [UserService, TypeOrmModule.forFeature([User])],
 })
 export class UserModule {}

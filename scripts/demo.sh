@@ -36,6 +36,8 @@ ADMIN_PASS="secret_admin_password" # <-- IMPORTANT: Change this!
 # Set your Keycloak instance details
 REALM_NAME="notes_realm"
 
+# 1. Find the name of the PostgreSQL container (usually multilingual-notes-db-1)
+DB_CONTAINER=$(docker compose ps -q db)
 # --- End Configuration ---
 
 # 1. Get Admin Access Token
@@ -104,6 +106,7 @@ else
   # $? checks the exit code of the last command (curl)
   if [ $? -eq 0 ]; then
     echo "🎉 Success! User '$NEW_USER_USERNAME' created in realm '$REALM_NAME'."
+    echo
   else
     echo "❌ Error: Failed to create user."
     echo "Response from server:"
@@ -111,6 +114,11 @@ else
     exit 1
   fi
 fi
+
+echo "--- Data in the 'user' table ---"
+# Using -c "SELECT * FROM public.user" to execute SQL and \x to format output vertically (helpful for wide tables)
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "\x" -c "SELECT * FROM public.user"
+echo ""
 
 echo -e "${YELLOW}Step 1: Authenticating with Keycloak as '$USERNAME'...${NC}"
 
@@ -123,24 +131,27 @@ TOKEN_RESPONSE=$(curl -s -X POST \
   -d "username=$USERNAME" \
   -d "password=$PASSWORD")
 
+#echo "Response: $TOKEN_RESPONSE"
+
 # Use jq to parse the access token from the JSON response
 TOKEN=$(echo $TOKEN_RESPONSE | jq -r .access_token)
-
 if [ "$TOKEN" == "null" ] || [ -z "$TOKEN" ]; then
   echo -e "${RED}Error: Failed to get access token.${NC}"
   echo "Response: $TOKEN_RESPONSE"
   exit 1
 fi
 
+#echo "TOKEN: $TOKEN"
+
 echo -e "${GREEN}Successfully authenticated. Got access token.${NC}\n"
 
 # ===================================================================
 # 2. Call Backend API: Create a Note
 # ===================================================================
-echo -e "${YELLOW}Step 2: Creating a new note (POST /api/notes)...${NC}"
+echo -e "${YELLOW}Step 2: Creating a new note (POST /notes)...${NC}"
 
 CREATE_RESPONSE=$(curl -s -X POST \
-  "$API_URL/api/notes" \
+  "$API_URL/notes" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -161,23 +172,27 @@ echo -e "${GREEN}Note created successfully.${NC}"
 echo "$CREATE_RESPONSE" | jq
 echo ""
 
+echo "--- Data in the 'note' table ---"
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note"
+echo ""
+
 # ===================================================================
 # 3. Call Backend API: List All Notes
 # ===================================================================
-echo -e "${YELLOW}Step 3: Listing user's notes (GET /api/notes)...${NC}"
+echo -e "${YELLOW}Step 3: Listing user's notes (GET /notes)...${NC}"
 
 curl -s -X GET \
-  "$API_URL/api/notes" \
+  "$API_URL/notes" \
   -H "Authorization: Bearer $TOKEN" | jq
 echo ""
 
 # ===================================================================
 # 4. Call Backend API: Summarise Note
 # ===================================================================
-echo -e "${YELLOW}Step 4: Requesting summary for note $NOTE_ID (POST /api/summarise)...${NC}"
+echo -e "${YELLOW}Step 4: Requesting summary for note $NOTE_ID (POST /summarise)...${NC}"
 
 curl -s -X POST \
-  "$API_URL/api/summarise" \
+  "$API_URL/summarise" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d "{\"noteId\": \"$NOTE_ID\"}" | jq
@@ -186,10 +201,10 @@ echo ""
 # ===================================================================
 # 5. Call Backend API: Translate Note
 # ===================================================================
-echo -e "${YELLOW}Step 5: Requesting translation for note $NOTE_ID (POST /api/translate)...${NC}"
+echo -e "${YELLOW}Step 5: Requesting translation for note $NOTE_ID (POST /translate)...${NC}"
 
 curl -s -X POST \
-  "$API_URL/api/translate" \
+  "$API_URL/translate" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -201,10 +216,10 @@ echo ""
 # ===================================================================
 # 6. Call Backend API: Delete the Note
 # ===================================================================
-echo -e "${YELLOW}Step 6: Deleting note $NOTE_ID (DELETE /api/notes/$NOTE_ID)...${NC}"
+echo -e "${YELLOW}Step 6: Deleting note $NOTE_ID (DELETE /notes/$NOTE_ID)...${NC}"
 
 curl -s -X DELETE \
-  "$API_URL/api/notes/$NOTE_ID" \
+  "$API_URL/notes/$NOTE_ID" \
   -H "Authorization: Bearer $TOKEN"
 
 echo -e "\n${GREEN}Note deleted.${NC}"
@@ -216,8 +231,12 @@ echo ""
 echo -e "${YELLOW}Step 7: Listing notes again to confirm deletion...${NC}"
 
 curl -s -X GET \
-  "$API_URL/api/notes" \
+  "$API_URL/notes" \
   -H "Authorization: Bearer $TOKEN" | jq
+echo ""
+
+echo "--- Data in the 'note' table ---"
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note"
 echo ""
 
 echo -e "${GREEN}Demonstration complete.${NC}"
