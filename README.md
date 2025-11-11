@@ -102,7 +102,8 @@ Solution is produced for a handful of users, scale is of no concern at this stag
 
 ### F
 
-Demo script covers happy paths for minimal backend end-to-end testing. Manual QA for UI.
+Unit- and end-to-end tests - samples only, to demonstrate understanding in test approaches. Demo script covers happy
+paths for minimal backend end-to-end testing. Manual QA for UI.
 
 ## Analysis
 
@@ -111,3 +112,14 @@ See initial [analysis](docs/analysis.md) with design drafts and generated code.
 ## Development
 
 Refer to [dev guide](./docs/dev.md) for detailed development instructions.
+
+## To do
+
+* Fix: add pagination for a large list of notes. Currently, view is limited to a fixed number of notes in the UI.
+* Fix: all-languages search. Search works for a selected language only, not for all together.
+* Summariser with a light LLM model (container).
+* Unit- snd e2e test samples.
+* Rate limiting.
+* Audit logs.
+* Loading states?..
+* QA mobile web view.

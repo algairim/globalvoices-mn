@@ -19,5 +19,5 @@ This is an initial problem analysis with Google Gemini LLM assistance.
 13. [Keycloak Notes realm configuration import file](./llm/13-keycloak-client-realm.md)
 14. [BASH demo script](./llm/14-demo-script.md)
 
-The rest of the coding and debugging is performed with various LLM queries that has not sense
-in attaching in this document.
+The rest of the coding and debugging is performed with various LLM queries that have no sense attaching them in this
+document.
