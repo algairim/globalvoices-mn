@@ -96,6 +96,14 @@ user credentials and secure sessions. Solutions such as Keycloak open the door t
 **Note**, `POST /api/auth/register` and `POST /api/auth/login` are not implemented in this demo. See _cURL_ requests
 for user registration and authentication flow in the [demo.sh](./scripts/demo.sh) script.
 
+### E
+
+Solution is produced for a handful of users, scale is of no concern at this stage.
+
+### F
+
+Demo script covers happy paths for minimal backend end-to-end testing. Manual QA for UI.
+
 ## Analysis
 
 See initial [analysis](docs/analysis.md) with design drafts and generated code.
