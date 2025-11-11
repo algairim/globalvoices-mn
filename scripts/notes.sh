@@ -201,4 +201,4 @@ for i in $(seq 1 $TOTAL_NOTES); do
   # sleep 0.1
 done
 
-echo -e "\n${GREEN}Demonstration complete. Created $TOTAL_NOTES notes.${NC}"
+echo -e "\n${GREEN}Created $TOTAL_NOTES notes.${NC}"
