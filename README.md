@@ -7,7 +7,7 @@ instance for authentication, all managed with Docker Compose.
 
 ## How to Run the Application
 
-First, ensure you have Docker and Docker Compose installed. Create a `.env` file in the project root,
+First, ensure you have latest Docker and Docker Compose installed. Create a `.env` file in the project root,
 using `.env.example` as a template, to provide the necessary secrets. To build and start all services
 (including a pre-configured Keycloak realm and a sample user), you must first **clean any old data
 volumes** to ensure the Keycloak realm is imported correctly.
@@ -31,7 +31,15 @@ a summary and translation, and then delete the note, printing its progress at ea
 
 ## Assumptions
 
-TODO...
+* Solution is deployed in UNIX environment (I have no way to test it on Windows: the docker template and network wiring).
+* UI can be kept to a bare minimum without fancy styling and layout to demonstrate technologies used only. Good UX
+  requires series of discussions with key stakeholders and user feedback (if possible).
+* TLS termination is performed by the Gateway server and is not required in this setup.
+* User credentials are not handled by custom solutions these days as these are prone to code mistakes that introduce 
+  vulnerabilities. In order to not re-invent the wheel, Keycloak is proposed as a relatively mature solution to manage
+  user credentials and secure sessions. Solutions such as Keycloak open the door to many other platform integrations.
+  * Note, `POST /api/auth/register` and `POST /api/auth/login` are not implemented in this demo (see user registration
+    and authentication flow in the [demo.sh](./scripts/demo.sh) script).
 
 ## LLM analysis
 
