@@ -29,7 +29,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy the rest of the source code
-COPY . .
+COPY .. .
 
 # Run the build script to compile TypeScript to dist/
 RUN npm run build

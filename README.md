@@ -34,16 +34,16 @@ a summary and translation, and then delete the note, printing its progress at ea
 * Solution is deployed in UNIX environment (I have no way to test it on Windows: the docker template and network wiring).
 * UI can be kept to a bare minimum without fancy styling and layout to demonstrate technologies used only. Good UX
   requires series of discussions with key stakeholders and user feedback (if possible).
-* TLS termination is performed by the Gateway server and is not required in this setup.
+* TLS termination is performed at the Gateway server and is not required in this demo setup.
 * User credentials are not handled by custom solutions these days as these are prone to code mistakes that introduce 
   vulnerabilities. In order to not re-invent the wheel, Keycloak is proposed as a relatively mature solution to manage
   user credentials and secure sessions. Solutions such as Keycloak open the door to many other platform integrations.
   * Note, `POST /api/auth/register` and `POST /api/auth/login` are not implemented in this demo (see user registration
     and authentication flow in the [demo.sh](./scripts/demo.sh) script).
 
-## LLM analysis
+## Analysis
 
-See [LLM queries](docs) used for initial analysis, design drafts and generated code.
+See initial [analysis](docs/analysis.md) with design drafts and generated code.
 
 ## Development
 

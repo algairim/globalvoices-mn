@@ -32,7 +32,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy the rest of the frontend source code
-COPY . .
+COPY .. .
 
 # Pass build-time arguments (from docker-compose.yml)
 ARG VITE_API_URL
