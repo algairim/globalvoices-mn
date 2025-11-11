@@ -117,7 +117,7 @@ fi
 
 echo "--- Data in the 'user' table ---"
 # Using -c "SELECT * FROM public.user" to execute SQL and \x to format output vertically (helpful for wide tables)
-docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "\x" -c "SELECT * FROM public.user"
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "\x" -c "SELECT * FROM public.user" 2>/dev/null
 echo ""
 
 echo -e "${YELLOW}Step 1: Authenticating with Keycloak as '$USERNAME'...${NC}"
@@ -173,7 +173,7 @@ echo "$CREATE_RESPONSE" | jq
 echo ""
 
 echo "--- Data in the 'note' table ---"
-docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note"
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note" 2>/dev/null
 echo ""
 
 # ===================================================================
@@ -236,7 +236,7 @@ curl -s -X GET \
 echo ""
 
 echo "--- Data in the 'note' table ---"
-docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note"
+docker exec -it $DB_CONTAINER psql -U app_user -d multilingual_notes -c "SELECT * FROM public.note" 2>/dev/null
 echo ""
 
 echo -e "${GREEN}Demonstration complete.${NC}"
