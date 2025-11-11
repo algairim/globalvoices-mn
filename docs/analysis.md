@@ -1,6 +1,6 @@
 ## Analysis
 
-This is a problem analysis with Gemini LLM assistance.
+This is an initial problem analysis with Google Gemini LLM assistance.
 
 ### Queries
 
@@ -18,3 +18,6 @@ This is a problem analysis with Gemini LLM assistance.
 12. [Frontend source files](./llm/12-frontend-src-files.md)
 13. [Keycloak Notes realm configuration import file](./llm/13-keycloak-client-realm.md)
 14. [BASH demo script](./llm/14-demo-script.md)
+
+The rest of the coding and debugging is performed with various LLM queries that has not sense
+in attaching in this document.
