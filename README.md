@@ -1,6 +1,4 @@
-# Multilingual Notes
-
-Multilingual Notes, Global Voices Ltd.
+# [ARCHIVED] Multilingual Notes
 
 This project is a full-stack application featuring a React frontend, a NestJS backend, custom translator and a Keycloak
 instance for authentication, all managed with Docker Compose.
@@ -121,5 +119,5 @@ Refer to [dev guide](./docs/dev.md) for detailed development instructions.
 * Unit- snd e2e test samples.
 * Rate limiting.
 * Audit logs.
-* Loading states?..
+* Loading states.
 * QA mobile web view.
